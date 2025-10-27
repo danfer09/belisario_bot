@@ -25,5 +25,5 @@ app.add_handler(CommandHandler("start", start))
 app.add_handler(CommandHandler(["ayuda","help"], ayuda))
 app.add_handler(CommandHandler("frase", frase))
 
-print("Bot en marcha... Ctrl+C para detenerlo.")
+print("Bot en marcha... Ctrl+C para detenerlo...")
 app.run_polling()
