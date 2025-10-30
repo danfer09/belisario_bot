@@ -1,15 +1,34 @@
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
+from pathlib import Path
 
-# 🔑 Sustituye por tu token
-load_dotenv()
-TOKEN = os.getenv("BOT_TOKEN")
-DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+# cargar ruta actual
+current_path = Path(__file__).resolve().parent 
+
+# Cargar ruta .env
+env_path = current_path / ".env"
+
+# --- 1️⃣ Cargar variables del archivo .env si existe (solo en local)
+if os.path.exists(env_path):
+    load_dotenv()
+    print("🔹 Archivo .env cargado (modo local)")
+else:
+    print("⚙️ Usando variables de entorno del sistema (Render u otro servidor)")
+
+# --- 2️⃣ Leer la variable TOKEN del entorno (ya sea del .env o del sistema)
+TOKEN = os.getenv("TOKEN")
+
+# --- 3️⃣ Verificar que realmente se haya cargado
+if not TOKEN:
+    raise ValueError("❌ No se encontró TOKEN en el entorno ni en .env")
+
+print("✅ Token cargado correctamente:", TOKEN[:10] + "..." if TOKEN else "(vacío)")
+
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("¡Hola! Soy tu bot en dev pero en la rama de git!! 😊")
+    await update.message.reply_text("¡Hola! Soy tu bot! 😊")
 
 async def ayuda(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Comandos disponibles:\n/start - saludar\n/frase - obtener una frase motivadora")
